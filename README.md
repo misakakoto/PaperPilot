@@ -12,6 +12,80 @@ PaperPilot 是面向论文阅读与研究原型开发的科研 Agent，结合混
 
 论文阅读任务通过证据 ID 将选定材料交接给原型任务。原型验证覆盖代码接口与执行条件，训练效果和研究假设通过后续实验评估。
 
+## 系统结构
+
+工作台通过任务适配器连接论文分析、主动取证和研究原型能力。共享运行时管理上下文、预算、请求回执与任务版本。
+
+```mermaid
+flowchart TB
+    UI[Web 科研工作台 / API / CLI]
+    subgraph Tasks[任务适配层]
+        QA[论文理解与分析]
+        Active[主动论文取证]
+        Prototype[研究原型开发]
+        Diagnosis[实验结果诊断]
+    end
+    subgraph Runtime[共享运行时]
+        Runner[EpisodeRunner · 动作推进与恢复]
+        Context[ContextCompiler · 任务视图与预算装包]
+        Version[任务依赖 / 产物版本 / ChangeImpact]
+        Budget[累计预算 / 请求账本 / 未知结果阻塞]
+    end
+    subgraph Tools[工具与执行层]
+        Search[论文目录 / BM25 / 可选向量与重排]
+        Read[原文读取 / 来源句柄 / 证据账本]
+        Model[模型 API · 分析 / 决策 / 代码生成]
+        Docker[Docker · 冻结候选工程验证]
+    end
+    Store[(SQLite / 版本化产物 / 来源与执行回执)]
+    UI --> Tasks
+    Tasks --> Runtime
+    Runner --- Context
+    Runner --- Version
+    Runner --- Budget
+    Runtime --> Tools
+    Tools --> Store
+    Runtime --> Store
+    Active -. 用户选择证据后交接 .-> Prototype
+```
+
+普通论文问答与主动取证由任务配置选择；原型研发通过独立任务接收选定证据。角色表示任务职责，执行采用串行调度。
+
+## 运行流程
+
+```mermaid
+flowchart TD
+    Goal[研究问题与输入约束] --> Route{任务类型}
+    Route -->|论文分析 / 主动取证| Find[确定论文范围并检索候选]
+    Find --> Read[读取原文 / 邻段 / 表格]
+    Read --> Ledger[登记已读证据、来源与缺口]
+    Ledger --> Enough{证据是否足够?}
+    Enough -->|存在可解决缺口且预算允许| Find
+    Enough -->|足够| Answer[生成带来源的回答]
+    Enough -->|资料或预算限制| Partial[交付部分结论与缺口]
+    Answer -. 用户选择证据并提交原型任务 .-> Design
+    Route -->|研究原型| Design[形成方案、接口与任务依赖]
+    Design --> Code[生成并冻结代码候选与验证配置]
+    Code --> Approval{候选审批}
+    Approval -->|通过| Execute[禁网 Docker · 前向 / 损失 / 反向 / 资源检查]
+    Approval -->|待审批| Pending[保存候选并等待]
+    Execute --> Result{验证反馈}
+    Result -->|通过| Deliver[交付代码、验证结果与待实验事项]
+    Result -->|实现问题且修复预算允许| Repair[依据真实错误修复代码]
+    Repair --> Code
+    Result -->|设计或资源问题| Revise[修订方案并使下游旧结果失效]
+    Revise --> Design
+    Result -->|环境或预算限制| Stop[保存回执与阻塞原因]
+```
+
+每次模型或工具动作都经过预算、版本与状态检查。已保存的确定结果可在中断后复用；外部请求结果未知时暂停，等待确认。
+
+## 项目界面
+
+以下为项目实际 Web 工作台，在未导入论文、未配置 API 的独立工作区中截图。
+
+![PaperPilot 科研工作台](docs/images/workbench.png)
+
 ## 安装与配置
 
 需要 Python 3.11+。建议建立独立环境。
