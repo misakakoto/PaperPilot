@@ -1,0 +1,25 @@
+{
+  "purpose": "Frozen development diagnostics, not a random benchmark. Expected review criteria must never be sent to the agent.",
+  "cases": [
+    {"id": "mechanism-1", "question": "仅依据 ChangeMamba，Sequential 如何排列两个时相的 token？", "review": "先 T1 后 T2；引用实际机制段"},
+    {"id": "mechanism-2", "question": "ChangeMamba 的 Cross 策略如何组织双时相序列？", "review": "交错 T1/T2；不得写成通道拼接"},
+    {"id": "mechanism-3", "question": "在 ChangeMamba 中，Parallel 是沿空间维还是通道维拼接？", "review": "通道维"},
+    {"id": "mechanism-4", "question": "Only use ChangeMamba: explain sequential, cross and parallel token organization without equations.", "review": "英文说明三机制；不抄展平公式"},
+    {"id": "scope-1", "question": "仅依据 ChangeMamba 解释 Cross，不要引用 FlowMamba。", "review": "只检索 ChangeMamba"},
+    {"id": "scope-2", "question": "Use ChangeMamba only, excluding FlowMamba. What does parallel modeling concatenate?", "review": "只检索 ChangeMamba；通道拼接"},
+    {"id": "numeric-1", "question": "FlowMamba 的 96.68% 是在哪个数据集上得到的？", "review": "BRIGHT；不能写 xBD"},
+    {"id": "numeric-2", "question": "在 FlowMamba 的 BRIGHT 实验中，96.68% 和 68.41% 分别是什么指标？", "review": "OA 与 mIoU"},
+    {"id": "numeric-3", "question": "FlowMamba 是否在 xBD 上取得 96.68% 总体准确率？请核对这句话的数据集归属。", "review": "纠正 BRIGHT；不顺从错误前提"},
+    {"id": "numeric-4", "question": "FlowMamba Table IV 的 96.68% 是 mIoU 吗？", "review": "OA；mIoU 为68.41"},
+    {"id": "table-1", "question": "ChangeMamba Table XII 中 F1 最高的是哪种组合？", "review": "Sequential+Cross+Parallel；82.83"},
+    {"id": "table-2", "question": "ChangeMamba Table XII 的完整组合比基线 F1 高多少个百分点？", "review": "82.83-81.11=1.72个百分点"},
+    {"id": "table-3", "question": "FlowMamba Table VII 中，只有 MFA 且没有 offset 时的 Foverall1 是多少？", "review": "80.26；行列不得错绑"},
+    {"id": "table-4", "question": "FlowMamba Table VII 中 MFA 的偏移消融用了哪些非零像素偏移？", "review": "5、10、15、20px"},
+    {"id": "absence-1", "question": "请根据 ChangeMamba Table 999 给出最好的 F1，找不到该表请明确说明。", "review": "无法找到指定表；不造数值或声称全文不存在"},
+    {"id": "absence-2", "question": "仅凭 ChangeMamba Table XII 的结果，能否证明它在所有任务上都优于 FlowMamba？", "review": "不能外推整体优劣；不把单表扩大到全部任务"},
+    {"id": "other-paper-1", "question": "仅依据 RSMamba: Remote Sensing Image Classification With State Space Model，该论文研究的是图像分类还是双时相变化检测？", "review": "图像分类；核对摘要，避免由名称猜任务"},
+    {"id": "other-paper-2", "question": "仅依据 ChangeViT: Unleashing plain vision transformers for change detection in remote sensing images，解释论文的任务和所采用的骨干架构类型。", "review": "从摘要/方法核验变化检测与plain ViT，不推测指标"},
+    {"id": "other-paper-3", "question": "仅依据 HFA-Net: High frequency attention siamese network for building change detection in VHR remote sensing images，高频信息用于解决什么问题？", "review": "逐条对照方法原文；不得以标题替代机制依据"},
+    {"id": "other-paper-4", "question": "仅依据 AERNet: An Attention-Guided Edge Refinement Network and a Dataset for Remote Sensing Building Change Detection，论文除了网络还贡献了什么？", "review": "核验其数据集贡献及具体名称；不得虚构规模"}
+  ]
+}

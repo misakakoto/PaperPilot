@@ -1,0 +1,143 @@
+{
+  "schema_version": 2,
+  "scenarios": [
+    {
+      "id": "single_changemamba_detail",
+      "kind": "single_paper",
+      "question": "仅依据本地论文《ChangeMamba: Remote Sensing Change Detection With Spatiotemporal State Space Model》，说明 Sequential、Cross、Parallel 三种机制如何组织双时相特征，并结合 Table XII 比较基线、最佳单机制与完整组合。请将方法机制和实验结论分开回答，所有数值绑定引用；证据不足时明确说明。",
+      "success_requirements": [
+        "回答三种 token 组织的具体差异",
+        "给出 Table XII 的基线、最佳单机制和完整组合数值",
+        "所有事实引用只来自 ChangeMamba",
+        "运行结果为 ANSWERED 且回答质量门通过"
+      ],
+      "answer_checks": {
+        "minimum_supported_claims": 2,
+        "minimum_citations": 2,
+        "required_citation_source_sha256s": [
+          "bc6159dbfcd9fba2abfceccfbcb4e13cd816abbb07d490743c6958f4bbeaf1b9"
+        ],
+        "allowed_citation_source_sha256s": [
+          "bc6159dbfcd9fba2abfceccfbcb4e13cd816abbb07d490743c6958f4bbeaf1b9"
+        ],
+        "required_substrings": [
+          "Sequential",
+          "Cross",
+          "Parallel",
+          "方法机制",
+          "实验结论"
+        ],
+        "required_any_substring_groups": [
+          ["按时间顺序", "时序排列", "依次连接"],
+          ["交叉排序", "交错排列", "交替组合", "交替排列"],
+          ["通道维度", "通道维"],
+          ["联合建模", "共同建模"]
+        ],
+        "required_one_of_substring_groups": [
+          ["81.11", "82.24", "82.83"],
+          ["91.71", "92.20", "92.35"],
+          ["68.22", "69.84", "70.70"]
+        ],
+        "forbidden_substrings": []
+      }
+    },
+    {
+      "id": "multi_change_flow_comparison",
+      "kind": "multi_paper",
+      "question": "仅依据本地论文《ChangeMamba: Remote Sensing Change Detection With Spatiotemporal State Space Model》和《FlowMamba: Building Damage Assessment via Optics Flow-Based State Space Model》，对比前者的 Sequential、Cross、Parallel token 组织与后者的 MFA 光流对齐分别作用于什么表示、解决什么问题；再分别引用 Table XII 和 Table VII 中一个消融结果。不得混用两篇论文证据，并区分论文事实与比较性推断。",
+      "success_requirements": [
+        "两篇论文分别形成来源绑定的机制 Claim 与结果 Claim",
+        "FlowMamba 的 MFA/CDA 勾选列通过像素审计",
+        "回答至少覆盖两篇论文且无跨论文引用",
+        "运行结果为 ANSWERED 且回答质量门通过"
+      ],
+      "answer_checks": {
+        "minimum_supported_claims": 4,
+        "minimum_citations": 4,
+        "required_citation_source_sha256s": [
+          "bc6159dbfcd9fba2abfceccfbcb4e13cd816abbb07d490743c6958f4bbeaf1b9",
+          "7ff8e41d335452c27e8debfbef517061729fcd1a09595aa7c7c4e58606dcbf20"
+        ],
+        "allowed_citation_source_sha256s": [
+          "bc6159dbfcd9fba2abfceccfbcb4e13cd816abbb07d490743c6958f4bbeaf1b9",
+          "7ff8e41d335452c27e8debfbef517061729fcd1a09595aa7c7c4e58606dcbf20"
+        ],
+        "required_substrings": [
+          "Sequential",
+          "Cross",
+          "Parallel",
+          "MFA",
+          "论文事实",
+          "比较性推断",
+          "92.35",
+          "82.83"
+        ],
+        "required_one_of_substring_groups": [
+          ["80.14", "80.26"],
+          ["80.43", "80.53"]
+        ],
+        "forbidden_substrings": [
+          "Multi-scale Feature Alignment"
+        ]
+      }
+    },
+    {
+      "id": "followup_alignment_inference",
+      "kind": "follow_up",
+      "parent_scenario_id": "multi_change_flow_comparison",
+      "question": "基于上一问已经核验的两篇论文证据，哪一种设计更直接处理双时相空间错位？请只作机制层面的比较，明确分成“论文事实”“比较性推断”“结论边界”，并说明该比较不能证明什么。",
+      "success_requirements": [
+        "正确解析上一问指代并保留同一 conversation_id",
+        "父回答文本不作为证据，事实必须绑定稳定论文锚点",
+        "中文回答包含事实、推断和结论边界",
+        "运行结果为 ANSWERED 且回答质量门通过"
+      ],
+      "answer_checks": {
+        "minimum_supported_claims": 2,
+        "minimum_citations": 2,
+        "require_follow_up_lineage": true,
+        "required_citation_source_sha256s": [
+          "bc6159dbfcd9fba2abfceccfbcb4e13cd816abbb07d490743c6958f4bbeaf1b9",
+          "7ff8e41d335452c27e8debfbef517061729fcd1a09595aa7c7c4e58606dcbf20"
+        ],
+        "allowed_citation_source_sha256s": [
+          "bc6159dbfcd9fba2abfceccfbcb4e13cd816abbb07d490743c6958f4bbeaf1b9",
+          "7ff8e41d335452c27e8debfbef517061729fcd1a09595aa7c7c4e58606dcbf20"
+        ],
+        "required_substrings": [
+          "论文事实",
+          "比较性推断",
+          "结论边界",
+          "FlowMamba",
+          "MFA",
+          "不能证明"
+        ],
+        "forbidden_substrings": [
+          "Multi-scale Feature Alignment"
+        ]
+      }
+    }
+  ],
+  "retrieval_probes": [
+    {
+      "name": "changemamba_token_organization",
+      "paper_title": "ChangeMamba: Remote Sensing Change Detection With Spatiotemporal State Space Model",
+      "query": "ChangeMamba Sequential modeling temporal order Cross cross-ordering Parallel channel concatenate tokens",
+      "required_term_groups": [
+        ["sequential modeling", "sequential modelling"],
+        ["cross-ordering", "cross modeling", "cross modelling"],
+        ["channel dimension", "concatc"]
+      ]
+    },
+    {
+      "name": "flowmamba_alignment",
+      "paper_title": "FlowMamba: Building Damage Assessment via Optics Flow-Based State Space Model",
+      "query": "FlowMamba MFA differential flow alignment estimate compensate pixel-wise displacement spatial misalignment bitemporal features",
+      "required_term_groups": [
+        ["flow alignment", "optical flow"],
+        ["pixel-wise displacement", "pixelwise displacement"],
+        ["spatial misalignment", "spatial offset"]
+      ]
+    }
+  ]
+}

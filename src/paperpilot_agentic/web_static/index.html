@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PaperPilot · 科研工作台</title>
+<link rel="stylesheet" href="/assets/workbench.css">
+<link rel="stylesheet" href="/assets/vendor/katex/katex.min.css">
+<script src="/assets/vendor/katex/katex.min.js" defer></script>
+<script src="/assets/vendor/katex/auto-render.min.js" defer></script>
+<script src="/assets/workbench.js?v=workbench-1" type="module"></script>
+</head>
+<body><div class="workspace">
+<aside class="sidebar" id="sidebar">
+<div class="brand"><span class="brand-mark">P</span><div>PaperPilot<small>从证据到实验</small></div></div>
+<button id="new-conversation" class="primary">＋ 新研究</button>
+<div class="side-label">研究会话 <button id="refresh">刷新</button></div>
+<nav id="conversations" aria-label="研究会话"></nav>
+<button id="more-conversations" hidden>加载更多会话</button>
+<div id="runtime" class="runtime"></div>
+</aside>
+<main>
+<header><div><button id="mobile-menu" aria-label="显示会话列表">☰</button><strong id="title">科研工作台</strong><span class="local-tag">本地工作区</span></div><div class="header-actions"><button id="library">论文库</button><button id="research-workflow">科研任务</button><button id="imported-experiments">实验诊断</button><button id="materials" disabled>研究材料</button></div></header>
+<div id="notice" role="status" hidden></div>
+<div id="scroll-area" class="scroll-area">
+<section id="welcome" class="welcome">
+<div class="eyebrow">PAPERPILOT / RESEARCH WORKSPACE</div>
+<h1>让研究沿着证据，<br>向前一步。</h1>
+<p>理解论文、提出可检验的假设，审阅局部改动，再依据实验结果决定下一步。</p>
+<div class="examples">
+<button data-example="比较所选论文的核心模块、解决的问题和实验条件；区分原文事实与比较推断。">比较方法<span>建立有来源的对照</span></button>
+<button data-example="整理所选论文的数据集、模型模块、评价指标和局限，并保留原文来源。">理解论文<span>方法、条件与来源分别核对</span></button>
+<button data-example="根据所选论文，分析可以验证的变化检测改进方向；先解释依据与需要补齐的实验条件，不启动训练。">探索实验方向<span>先建立依据，再审阅方案</span></button>
+</div><p class="boundary">当前支持已验证方法的短实验诊断，不承诺任意模型自主训练或科研创新。</p>
+</section>
+<button id="older-turns" hidden>加载更早的研究记录</button>
+<section id="thread" aria-label="研究对话"></section>
+</div>
+<div class="composer-area"><div id="connection" aria-live="polite"></div>
+<form id="composer">
+<div class="scope-row"><button id="scope" type="button">全部本地论文</button><label>任务 <select id="intent"><option value="answer">论文理解与分析</option></select></label></div>
+<textarea id="question" rows="3" required aria-label="研究问题" placeholder="描述你的研究问题，或补充当前目标与限制…"></textarea>
+<div class="composer-bottom"><span id="hint">正在连接工作区…</span><div><button id="stop" type="button" hidden>停止</button><button id="resume" type="button" hidden>检查并恢复</button><button id="send" type="submit" class="primary" disabled>发送 ↑</button></div></div>
+</form></div>
+</main>
+<aside id="inspector" class="inspector" hidden><div class="inspector-head"><h2 id="panel-title">研究材料</h2><button id="close-panel" aria-label="关闭材料侧栏">×</button></div><div id="panel-content"></div></aside>
+</div></body></html>
